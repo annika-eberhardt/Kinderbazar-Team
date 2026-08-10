@@ -1,0 +1,62 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function myProfile() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+
+    function isAdmin() {
+      return isSignedIn() &&
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        myProfile().data.role == 'admin';
+    }
+
+    function isActiveMember() {
+      return isSignedIn() &&
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        myProfile().data.active == true;
+    }
+
+    // Users: everyone signed in can read profiles (needed to show names on
+    // lists/events). Only admins can create accounts, change roles or
+    // activate/deactivate members. A member may edit their own name/email
+    // but never their own role or active flag.
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow create: if isAdmin();
+      allow delete: if isAdmin();
+      allow update: if isAdmin() ||
+        (isSignedIn() && request.auth.uid == userId &&
+          request.resource.data.role == resource.data.role &&
+          request.resource.data.active == resource.data.active);
+    }
+
+    // Events: any active member can read, only admins can manage.
+    match /events/{eventId} {
+      allow read: if isSignedIn();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Lists: any active member can read and can sign up / withdraw
+    // (which only touches the `items` field). Only admins may change the
+    // list's own metadata, and only admins may create or delete lists.
+    match /lists/{listId} {
+      allow read: if isSignedIn();
+      allow create: if isAdmin();
+      allow delete: if isAdmin();
+      allow update: if isAdmin() ||
+        (isActiveMember() &&
+          request.resource.data.title == resource.data.title &&
+          request.resource.data.description == resource.data.description &&
+          request.resource.data.eventId == resource.data.eventId &&
+          request.resource.data.allowMemberAddItems == resource.data.allowMemberAddItems &&
+          request.resource.data.createdBy == resource.data.createdBy);
+    }
+  }
+}
