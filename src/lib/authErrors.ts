@@ -1,5 +1,15 @@
 import { FirebaseError } from "firebase/app";
 
+/** True for errors that mean "wrong email/password", as opposed to network/format errors. */
+export function isCredentialError(err: unknown): boolean {
+  return (
+    err instanceof FirebaseError &&
+    (err.code === "auth/invalid-credential" ||
+      err.code === "auth/wrong-password" ||
+      err.code === "auth/user-not-found")
+  );
+}
+
 export function friendlyAuthError(err: unknown): string {
   if (err instanceof FirebaseError) {
     switch (err.code) {

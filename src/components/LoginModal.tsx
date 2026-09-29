@@ -6,7 +6,13 @@ import {
 import { auth } from "../firebase";
 import { useAuth } from "../contexts/AuthContext";
 import { useLoginModal } from "../contexts/LoginModalContext";
-import { friendlyAuthError } from "../lib/authErrors";
+import { friendlyAuthError, isCredentialError } from "../lib/authErrors";
+import {
+  clearLockout,
+  formatRemaining,
+  getLockoutRemaining,
+  registerFailedAttempt,
+} from "../lib/loginLockout";
 import logo from "../assets/logo.png";
 
 export function LoginModal() {
@@ -17,6 +23,30 @@ export function LoginModal() {
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [lockedUntil, setLockedUntil] = useState<number | null>(null);
+  const [now, setNow] = useState(Date.now());
+
+  // Tick every second while locked so the countdown stays accurate, and
+  // clear the lock once it expires.
+  useEffect(() => {
+    if (lockedUntil === null) return;
+    setNow(Date.now());
+    if (Date.now() >= lockedUntil) {
+      setLockedUntil(null);
+      return;
+    }
+    const interval = setInterval(() => {
+      setNow(Date.now());
+      if (Date.now() >= lockedUntil) setLockedUntil(null);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [lockedUntil]);
+
+  // Re-check the lock whenever the email changes (e.g. switching accounts).
+  useEffect(() => {
+    const remaining = getLockoutRemaining(email.trim());
+    setLockedUntil(remaining > 0 ? Date.now() + remaining : null);
+  }, [email]);
 
   // Close automatically once sign-in succeeds.
   useEffect(() => {
@@ -42,11 +72,33 @@ export function LoginModal() {
     e.preventDefault();
     setError(null);
     setInfo(null);
+
+    const trimmedEmail = email.trim();
+    const remaining = getLockoutRemaining(trimmedEmail);
+    if (remaining > 0) {
+      setLockedUntil(Date.now() + remaining);
+      return;
+    }
+
     setSubmitting(true);
     try {
-      await signInWithEmailAndPassword(auth, email.trim(), password);
+      await signInWithEmailAndPassword(auth, trimmedEmail, password);
+      clearLockout(trimmedEmail);
     } catch (err) {
-      setError(friendlyAuthError(err));
+      if (isCredentialError(err)) {
+        const { lockedMs, remainingAttempts } = registerFailedAttempt(trimmedEmail);
+        if (lockedMs > 0) {
+          setLockedUntil(Date.now() + lockedMs);
+        } else {
+          const hint =
+            remainingAttempts <= 1
+              ? ` Noch ${remainingAttempts} Versuch, dann wird der Account vorübergehend gesperrt.`
+              : "";
+          setError(friendlyAuthError(err) + hint);
+        }
+      } else {
+        setError(friendlyAuthError(err));
+      }
     } finally {
       setSubmitting(false);
     }
@@ -129,16 +181,25 @@ export function LoginModal() {
             />
           </div>
 
-          {error && (
-            <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p>
-          )}
-          {info && (
-            <p className="rounded-xl bg-brand-50 px-3 py-2 text-sm text-brand-700">{info}</p>
+          {lockedUntil !== null ? (
+            <p className="rounded-xl bg-amber-50 px-3 py-2 text-sm text-amber-700">
+              Zu viele Fehlversuche. Bitte versuche es in{" "}
+              {formatRemaining(lockedUntil - now)} erneut.
+            </p>
+          ) : (
+            <>
+              {error && (
+                <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p>
+              )}
+              {info && (
+                <p className="rounded-xl bg-brand-50 px-3 py-2 text-sm text-brand-700">{info}</p>
+              )}
+            </>
           )}
 
           <button
             type="submit"
-            disabled={submitting}
+            disabled={submitting || lockedUntil !== null}
             className="mt-1 rounded-xl bg-brand-500 px-4 py-2 font-medium text-white transition active:scale-95 hover:bg-brand-600 disabled:opacity-60"
           >
             {submitting ? "Anmelden…" : "Anmelden"}
