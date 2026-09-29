@@ -35,7 +35,7 @@ export function Layout() {
             <img
               src={logo}
               alt="Kinderbasar-Team Logo"
-              className="h-11 w-11 rounded-[22%] object-contain sm:h-14 sm:w-14"
+              className="h-11 w-11 rounded-[22%] object-contain shadow-sm ring-2 ring-white/50 sm:h-14 sm:w-14"
             />
             <span className="font-bold text-white">Kinderbasar Team</span>
           </div>

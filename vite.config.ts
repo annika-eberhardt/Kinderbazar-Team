@@ -10,7 +10,7 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon-32x32.png', 'apple-touch-icon.png'],
+      includeAssets: ['favicon.ico', 'favicon-16.png', 'favicon-32x32.png', 'apple-touch-icon.png'],
       manifest: {
         name: 'Kinderbasar Team',
         short_name: 'Kinderbasar',

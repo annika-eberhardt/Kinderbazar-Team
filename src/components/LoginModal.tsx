@@ -141,8 +141,12 @@ export function LoginModal() {
         </button>
 
         <div className="mb-6 text-center">
-          <div className="mx-auto mb-3 flex h-20 w-20 items-center justify-center rounded-[22%] bg-brand-500 p-2">
-            <img src={logo} alt="Kinderbasar-Team Logo" className="h-full w-full object-contain" />
+          <div className="mx-auto mb-3 h-20 w-20">
+            <img
+              src={logo}
+              alt="Kinderbasar-Team Logo"
+              className="h-full w-full rounded-[22%] object-contain shadow-md ring-1 ring-brand-100"
+            />
           </div>
           <h1 className="text-xl font-bold text-neutral-800">Kinderbasar Team</h1>
           <p className="mt-1 text-sm text-neutral-500">
