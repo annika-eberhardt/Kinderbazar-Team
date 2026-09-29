@@ -34,10 +34,10 @@ export function Layout() {
           <div className="flex items-center gap-2">
             <img
               src={logo}
-              alt="Kinderbazar-Team Logo"
+              alt="Kinderbasar-Team Logo"
               className="h-11 w-11 rounded-[22%] object-contain sm:h-14 sm:w-14"
             />
-            <span className="font-bold text-white">Kinderbazar Team</span>
+            <span className="font-bold text-white">Kinderbasar Team</span>
           </div>
 
           <nav className="hidden items-center gap-1 sm:flex">

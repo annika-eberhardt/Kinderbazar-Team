@@ -142,9 +142,9 @@ export function LoginModal() {
 
         <div className="mb-6 text-center">
           <div className="mx-auto mb-3 flex h-20 w-20 items-center justify-center rounded-[22%] bg-brand-500 p-2">
-            <img src={logo} alt="Kinderbazar-Team Logo" className="h-full w-full object-contain" />
+            <img src={logo} alt="Kinderbasar-Team Logo" className="h-full w-full object-contain" />
           </div>
-          <h1 className="text-xl font-bold text-neutral-800">Kinderbazar Team</h1>
+          <h1 className="text-xl font-bold text-neutral-800">Kinderbasar Team</h1>
           <p className="mt-1 text-sm text-neutral-500">
             Melde dich mit deinem Team-Konto an.
           </p>

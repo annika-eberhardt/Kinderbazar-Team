@@ -31,7 +31,7 @@ export function Datenschutz() {
             dies zur Bereitstellung einer funktionsfähigen Website sowie unserer Inhalte und
             Leistungen erforderlich ist. Rechtsgrundlage ist, je nach Zweck, Art. 6 Abs. 1 lit. a
             (Einwilligung), lit. b (Vertragserfüllung bzw. vorvertragliche Maßnahmen) oder lit. f
-            DSGVO (berechtigtes Interesse an der Organisation des Kinderbazars).
+            DSGVO (berechtigtes Interesse an der Organisation des Kinderbasars).
           </p>
         </section>
 

@@ -1,6 +1,6 @@
-# Kinderbazar Team App
+# Kinderbasar Team App
 
-Web-App fürs Kinderbazar-Team: Termine anlegen, Listen zum Eintragen
+Web-App fürs Kinderbasar-Team: Termine anlegen, Listen zum Eintragen
 (z. B. Kuchenliste, Dienste), Mitgliederverwaltung mit Rollen
 (Admin/Mitglied). Neue Konten können ausschließlich von Admins angelegt
 werden – es gibt keine offene Selbstregistrierung.
@@ -82,18 +82,20 @@ Oberfläche anlegen (Name, E-Mail, Anfangspasswort, Rolle).
 
 ## 5. Deployment über GitHub Actions
 
-Der Workflow `.github/workflows/deploy.yml` baut die App bei jedem Push
-auf `main` und deployt sie auf Firebase Hosting. Dafür einmalig
-einrichten:
+Der Workflow `.github/workflows/firebase-hosting-merge.yml` baut die
+App bei jedem Push auf `main` und deployt sie auf Firebase Hosting.
+Dafür einmalig einrichten:
 
 ```bash
 firebase init hosting:github
 ```
 
 Das richtet automatisch den nötigen Service-Account und das GitHub
-Secret `FIREBASE_SERVICE_ACCOUNT` ein. Zusätzlich im GitHub-Repo unter
-*Settings → Secrets and variables → Actions* die sechs `VITE_FIREBASE_*`
-Werte aus deiner `.env` als Secrets hinterlegen (gleiche Namen).
+Secret `FIREBASE_SERVICE_ACCOUNT_<PROJEKT_ID>` ein. Zusätzlich im
+GitHub-Repo unter *Settings → Secrets and variables → Actions* die
+sechs `VITE_FIREBASE_*` Werte aus deiner `.env` als Secrets hinterlegen
+(gleiche Namen) – sonst baut der Workflow ohne gültige Firebase-Konfiguration
+und die deployte Seite bleibt weiß.
 
 Alternativ manuell deployen:
 

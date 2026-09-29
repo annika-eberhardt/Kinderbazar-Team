@@ -22,7 +22,7 @@ export function buildEventIcs(event: EventItem) {
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Kinderbazar Team//App//DE",
+    "PRODID:-//Kinderbasar Team//App//DE",
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
     "BEGIN:VEVENT",

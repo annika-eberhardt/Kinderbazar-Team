@@ -12,9 +12,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon-32x32.png', 'apple-touch-icon.png'],
       manifest: {
-        name: 'Kinderbazar Team',
-        short_name: 'Kinderbazar',
-        description: 'Termine und Listen für das Kinderbazar-Team',
+        name: 'Kinderbasar Team',
+        short_name: 'Kinderbasar',
+        description: 'Termine und Listen für das Kinderbasar-Team',
         theme_color: '#cc0068',
         background_color: '#ffffff',
         display: 'standalone',
