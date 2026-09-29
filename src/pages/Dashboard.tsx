@@ -111,6 +111,11 @@ export function Dashboard() {
                   {formatDate(event.date)}
                   {event.location ? ` · ${event.location}` : ""}
                 </p>
+                {event.description && (
+                  <p className="mt-2 whitespace-pre-wrap text-sm text-neutral-600">
+                    {event.description}
+                  </p>
+                )}
               </Link>
 
               {eventLists.length === 0 && eventBasars.length === 0 ? (
