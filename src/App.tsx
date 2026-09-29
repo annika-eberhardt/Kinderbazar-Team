@@ -11,6 +11,8 @@ import { ListDetail } from "./pages/ListDetail";
 import { Basare } from "./pages/Basare";
 import { BasarDetail } from "./pages/BasarDetail";
 import { AdminUsers } from "./pages/AdminUsers";
+import { Impressum } from "./pages/Impressum";
+import { Datenschutz } from "./pages/Datenschutz";
 
 function App() {
   return (
@@ -24,6 +26,8 @@ function App() {
               <Route path="/" element={<Dashboard />} />
               <Route path="/events" element={<Events />} />
               <Route path="/events/:id" element={<EventDetail />} />
+              <Route path="/impressum" element={<Impressum />} />
+              <Route path="/datenschutz" element={<Datenschutz />} />
               <Route
                 path="/lists"
                 element={

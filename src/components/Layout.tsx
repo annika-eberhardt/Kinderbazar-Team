@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useLoginModal } from "../contexts/LoginModalContext";
 import { LoginModal } from "./LoginModal";
@@ -79,6 +79,15 @@ export function Layout() {
 
       <main className="mx-auto max-w-5xl px-4 py-6 pb-28 sm:py-8 sm:pb-8">
         <Outlet />
+
+        <footer className="mt-12 flex justify-center gap-4 border-t border-neutral-100 pt-6 text-xs text-neutral-400 print:hidden">
+          <Link to="/impressum" className="hover:text-neutral-600 hover:underline">
+            Impressum
+          </Link>
+          <Link to="/datenschutz" className="hover:text-neutral-600 hover:underline">
+            Datenschutz
+          </Link>
+        </footer>
       </main>
 
       <LoginModal />
