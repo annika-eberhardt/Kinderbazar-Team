@@ -27,6 +27,8 @@ export function friendlyAuthError(err: unknown): string {
         return "Das Passwort muss mindestens 6 Zeichen lang sein.";
       case "auth/network-request-failed":
         return "Netzwerkfehler. Bitte prüfe deine Internetverbindung.";
+      case "auth/requires-recent-login":
+        return "Bitte melde dich ab und wieder an, bevor du dein Passwort änderst.";
       default:
         return "Etwas ist schiefgelaufen. Bitte versuche es erneut.";
     }

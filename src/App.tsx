@@ -11,6 +11,7 @@ import { ListDetail } from "./pages/ListDetail";
 import { Basare } from "./pages/Basare";
 import { BasarDetail } from "./pages/BasarDetail";
 import { AdminUsers } from "./pages/AdminUsers";
+import { Account } from "./pages/Account";
 import { Impressum } from "./pages/Impressum";
 import { Datenschutz } from "./pages/Datenschutz";
 
@@ -57,6 +58,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <BasarDetail />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/konto"
+                element={
+                  <ProtectedRoute>
+                    <Account />
                   </ProtectedRoute>
                 }
               />

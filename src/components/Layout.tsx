@@ -3,7 +3,16 @@ import { useAuth } from "../contexts/AuthContext";
 import { useLoginModal } from "../contexts/LoginModalContext";
 import { LoginModal } from "./LoginModal";
 import logo from "../assets/logo.png";
-import { AdminIcon, CalendarIcon, HomeIcon, ListIcon, LoginIcon, LogoutIcon, TagIcon } from "./icons";
+import {
+  AdminIcon,
+  CalendarIcon,
+  HomeIcon,
+  ListIcon,
+  LoginIcon,
+  LogoutIcon,
+  TagIcon,
+  UserIcon,
+} from "./icons";
 
 const navItems = [
   { to: "/", label: "Übersicht", end: true, Icon: HomeIcon },
@@ -51,9 +60,14 @@ export function Layout() {
           <div className="flex items-center gap-3">
             {firebaseUser ? (
               <>
-                <span className="hidden text-sm text-white/80 sm:inline">
-                  {profile?.name}
-                </span>
+                <Link
+                  to="/konto"
+                  aria-label="Mein Konto"
+                  className="flex items-center gap-1.5 rounded-full p-2.5 text-white/90 transition hover:bg-white/15 hover:text-white sm:rounded-xl sm:px-3 sm:py-2"
+                >
+                  <UserIcon className="h-5 w-5 sm:hidden" />
+                  <span className="hidden text-sm font-medium sm:inline">{profile?.name}</span>
+                </Link>
                 <button
                   onClick={logout}
                   aria-label="Abmelden"
