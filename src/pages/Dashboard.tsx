@@ -114,7 +114,7 @@ export function Dashboard() {
               </Link>
 
               {eventLists.length === 0 && eventBasars.length === 0 ? (
-                <p className="mt-2 text-xs text-neutral-400">
+                <p className="mt-2 text-xs text-neutral-500">
                   {signedIn
                     ? "Keine Liste oder kein Basar zugeordnet."
                     : "Melde dich an, um Listen und die Nummernvergabe zu sehen."}
@@ -155,11 +155,13 @@ function TileItems({
   vergebeneNummernByBasarId: Record<string, number>;
 }) {
   return (
-    <div className="mt-3 flex flex-col gap-3 border-t border-neutral-100 pt-3">
+    <div className="mt-3 flex flex-col gap-4 border-t border-neutral-100 pt-3">
       {lists.length > 0 && (
         <div>
-          <p className="mb-1 text-xs font-semibold text-neutral-400">Listen</p>
-          <ul className="flex flex-col gap-1">
+          <p className="mb-1.5 text-xs font-bold uppercase tracking-wide text-neutral-500">
+            Listen
+          </p>
+          <ul className="flex flex-col gap-1.5">
             {lists.map((list) => {
               const filled = list.items.reduce((s, i) => s + i.signups.length, 0);
               const total = list.items.reduce((s, i) => s + i.capacity, 0);
@@ -167,11 +169,11 @@ function TileItems({
                 <li key={list.id}>
                   <Link
                     to={`/lists/${list.id}`}
-                    className="flex items-center gap-2 rounded-xl px-2 py-1.5 text-sm text-neutral-600 transition hover:bg-neutral-50"
+                    className="flex items-center gap-2.5 rounded-xl px-2.5 py-2 text-sm text-neutral-700 transition hover:bg-neutral-50"
                   >
-                    <ListIcon className="h-4 w-4 shrink-0 text-neutral-400" />
-                    <span className="flex-1 truncate">{list.title}</span>
-                    <span className="shrink-0 text-xs text-neutral-400">
+                    <ListIcon className="h-4 w-4 shrink-0 text-brand-500" />
+                    <span className="flex-1 break-words font-medium">{list.title}</span>
+                    <span className="shrink-0 rounded-full bg-neutral-100 px-2.5 py-1 text-xs font-semibold text-neutral-600">
                       {list.items.length === 0 ? "leer" : `${filled}/${total}`}
                     </span>
                   </Link>
@@ -184,17 +186,19 @@ function TileItems({
 
       {basars.length > 0 && (
         <div>
-          <p className="mb-1 text-xs font-semibold text-neutral-400">Nummernvergabe</p>
-          <ul className="flex flex-col gap-1">
+          <p className="mb-1.5 text-xs font-bold uppercase tracking-wide text-neutral-500">
+            Nummernvergabe
+          </p>
+          <ul className="flex flex-col gap-1.5">
             {basars.map((basar) => (
               <li key={basar.id}>
                 <Link
                   to={`/basare/${basar.id}`}
-                  className="flex items-center gap-2 rounded-xl px-2 py-1.5 text-sm text-neutral-600 transition hover:bg-neutral-50"
+                  className="flex items-center gap-2.5 rounded-xl px-2.5 py-2 text-sm text-neutral-700 transition hover:bg-neutral-50"
                 >
-                  <TagIcon className="h-4 w-4 shrink-0 text-neutral-400" />
-                  <span className="flex-1 truncate">{basar.name}</span>
-                  <span className="shrink-0 text-xs text-neutral-400">
+                  <TagIcon className="h-4 w-4 shrink-0 text-brand-500" />
+                  <span className="flex-1 break-words font-medium">{basar.name}</span>
+                  <span className="shrink-0 rounded-full bg-neutral-100 px-2.5 py-1 text-xs font-semibold text-neutral-600">
                     {vergebeneNummernByBasarId[basar.id] ?? 0} bestätigt
                   </span>
                 </Link>
