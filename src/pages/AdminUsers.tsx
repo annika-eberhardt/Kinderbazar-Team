@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from "react";
+import { Link } from "react-router-dom";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { useAuth } from "../contexts/AuthContext";
@@ -141,15 +142,24 @@ export function AdminUsers() {
                 <p className="text-sm text-neutral-500">{user.email}</p>
               </div>
               <div className="flex items-center gap-2">
-                <span
-                  className={`rounded-full px-2.5 py-1 text-xs font-medium ${
-                    user.role === "admin"
-                      ? "bg-brand-500 text-white"
-                      : "bg-neutral-100 text-neutral-600"
-                  }`}
-                >
-                  {user.role === "admin" ? "Admin" : "Mitglied"}
-                </span>
+                {user.uid === currentProfile?.uid ? (
+                  <Link
+                    to="/konto"
+                    className="rounded-full bg-brand-500 px-2.5 py-1 text-xs font-medium text-white hover:bg-brand-600"
+                  >
+                    Mein Konto
+                  </Link>
+                ) : (
+                  <span
+                    className={`rounded-full px-2.5 py-1 text-xs font-medium ${
+                      user.role === "admin"
+                        ? "bg-brand-500 text-white"
+                        : "bg-neutral-100 text-neutral-600"
+                    }`}
+                  >
+                    {user.role === "admin" ? "Admin" : "Mitglied"}
+                  </span>
+                )}
                 <button
                   onClick={() => toggleRole(user)}
                   className="rounded-xl px-2 py-1 text-xs font-medium text-brand-600 hover:bg-brand-100"
