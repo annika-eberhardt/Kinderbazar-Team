@@ -6,8 +6,8 @@
   --color-brand-200: #ffbedd;
   --color-brand-300: #ff8fc4;
   --color-brand-400: #fa5aa5;
-  --color-brand-500: #ec2c85;
-  --color-brand-600: #d31768;
+  --color-brand-500: #f0127e;
+  --color-brand-600: #cc0068;
   --color-brand-700: #ac0e54;
   --color-brand-800: #8c1049;
   --color-brand-900: #751142;
@@ -21,7 +21,7 @@ body,
 
 body {
   margin: 0;
-  @apply bg-brand-50 text-neutral-800 antialiased;
+  @apply bg-white text-neutral-800 antialiased;
 }
 
 ::selection {

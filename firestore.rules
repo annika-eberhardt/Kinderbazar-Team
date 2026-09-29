@@ -37,9 +37,10 @@ service cloud.firestore {
           request.resource.data.active == resource.data.active);
     }
 
-    // Events: any active member can read, only admins can manage.
+    // Events: public information, readable by anyone (no account needed).
+    // Only admins can create/edit/delete.
     match /events/{eventId} {
-      allow read: if isSignedIn();
+      allow read: if true;
       allow create, update, delete: if isAdmin();
     }
 
@@ -55,8 +56,38 @@ service cloud.firestore {
           request.resource.data.title == resource.data.title &&
           request.resource.data.description == resource.data.description &&
           request.resource.data.eventId == resource.data.eventId &&
+          request.resource.data.allowAdminSlots == resource.data.allowAdminSlots &&
           request.resource.data.allowMemberAddItems == resource.data.allowMemberAddItems &&
+          request.resource.data.enableWaitlist == resource.data.enableWaitlist &&
           request.resource.data.createdBy == resource.data.createdBy);
+    }
+
+    // Basare: any active member can read. Only admins manage name/datum/
+    // eventId/status — active members no longer write to the Basar doc
+    // itself, since Verkäufernummer state lives in separate collections.
+    match /basars/{basarId} {
+      allow read: if isSignedIn();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Verkäufernummern: a permanent, Basar-independent registration per
+    // person. Any active member can register/edit/cancel/release one.
+    match /verkaeufernummern/{numberId} {
+      allow read: if isSignedIn();
+      allow create, update, delete: if isActiveMember();
+    }
+
+    // BasarTeilnahmen: confirms a Verkäufernummer's participation in one
+    // specific Basar. Any active member can confirm/un-confirm.
+    match /basarTeilnahmen/{teilnahmeId} {
+      allow read: if isSignedIn();
+      allow create, update, delete: if isActiveMember();
+    }
+
+    // Counters: internal state (e.g. the next Verkäufernummer to hand out).
+    match /counters/{counterId} {
+      allow read: if isSignedIn();
+      allow write: if isActiveMember();
     }
   }
 }

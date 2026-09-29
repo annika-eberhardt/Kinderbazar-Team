@@ -72,7 +72,7 @@ export function AdminUsers() {
 
       <form
         onSubmit={handleCreate}
-        className="mb-8 flex flex-col gap-3 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-brand-100"
+        className="mb-8 flex flex-col gap-3 rounded-3xl bg-white p-5 shadow-sm ring-1 ring-brand-100"
       >
         <h2 className="font-semibold text-neutral-800">Neues Konto anlegen</h2>
         <div className="grid gap-3 sm:grid-cols-2">
@@ -80,40 +80,40 @@ export function AdminUsers() {
             placeholder="Name"
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
-            className="rounded-lg border border-neutral-300 px-3 py-2 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
+            className="rounded-xl border border-neutral-300 px-3 py-2 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
           />
           <input
             type="email"
             placeholder="E-Mail"
             value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
-            className="rounded-lg border border-neutral-300 px-3 py-2 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
+            className="rounded-xl border border-neutral-300 px-3 py-2 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
           />
           <input
             placeholder="Anfangspasswort"
             value={form.password}
             onChange={(e) => setForm({ ...form, password: e.target.value })}
-            className="rounded-lg border border-neutral-300 px-3 py-2 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
+            className="rounded-xl border border-neutral-300 px-3 py-2 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
           />
           <select
             value={form.role}
             onChange={(e) => setForm({ ...form, role: e.target.value as Role })}
-            className="rounded-lg border border-neutral-300 px-3 py-2 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
+            className="rounded-xl border border-neutral-300 px-3 py-2 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
           >
             <option value="member">Mitglied</option>
             <option value="admin">Admin</option>
           </select>
         </div>
         {error && (
-          <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p>
+          <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p>
         )}
         {success && (
-          <p className="rounded-lg bg-brand-50 px-3 py-2 text-sm text-brand-700">{success}</p>
+          <p className="rounded-xl bg-brand-50 px-3 py-2 text-sm text-brand-700">{success}</p>
         )}
         <button
           type="submit"
           disabled={saving}
-          className="self-start rounded-lg bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600 disabled:opacity-60"
+          className="self-start rounded-xl bg-brand-500 px-4 py-2 text-sm font-medium text-white transition active:scale-95 hover:bg-brand-600 disabled:opacity-60"
         >
           {saving ? "Wird angelegt…" : "Konto anlegen"}
         </button>
@@ -152,13 +152,13 @@ export function AdminUsers() {
                 </span>
                 <button
                   onClick={() => toggleRole(user)}
-                  className="rounded-lg px-2 py-1 text-xs font-medium text-brand-600 hover:bg-brand-100"
+                  className="rounded-xl px-2 py-1 text-xs font-medium text-brand-600 hover:bg-brand-100"
                 >
                   {user.role === "admin" ? "Zu Mitglied machen" : "Zu Admin machen"}
                 </button>
                 <button
                   onClick={() => toggleActive(user)}
-                  className="rounded-lg px-2 py-1 text-xs font-medium text-neutral-500 hover:bg-neutral-100"
+                  className="rounded-xl px-2 py-1 text-xs font-medium text-neutral-500 hover:bg-neutral-100"
                 >
                   {user.active ? "Deaktivieren" : "Aktivieren"}
                 </button>

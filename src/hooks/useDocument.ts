@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase";
 
-export function useDocument<T>(path: string, id: string | undefined) {
+export function useDocument<T>(path: string, id: string | undefined, enabled = true) {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!id) {
+    if (!id || !enabled) {
       setData(null);
       setLoading(false);
       return;
@@ -22,7 +22,7 @@ export function useDocument<T>(path: string, id: string | undefined) {
       () => setLoading(false),
     );
     return unsubscribe;
-  }, [path, id]);
+  }, [path, id, enabled]);
 
   return { data, loading };
 }

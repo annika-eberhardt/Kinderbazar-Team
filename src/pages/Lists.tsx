@@ -9,7 +9,9 @@ const emptyForm = {
   title: "",
   description: "",
   eventId: "",
+  allowAdminSlots: true,
   allowMemberAddItems: true,
+  enableWaitlist: false,
 };
 
 export function Lists() {
@@ -29,13 +31,19 @@ export function Lists() {
       setError("Ein Titel ist erforderlich.");
       return;
     }
+    if (!form.allowAdminSlots && !form.allowMemberAddItems) {
+      setError("Wähle mindestens eine Art von Eintrag für die Liste aus.");
+      return;
+    }
     setSaving(true);
     try {
       await createList({
         title: form.title.trim(),
         description: form.description.trim(),
         eventId: form.eventId || null,
+        allowAdminSlots: form.allowAdminSlots,
         allowMemberAddItems: form.allowMemberAddItems,
+        enableWaitlist: form.enableWaitlist,
         createdBy: profile.uid,
       });
       setShowForm(false);
@@ -56,7 +64,7 @@ export function Lists() {
         {isAdmin && (
           <button
             onClick={() => setShowForm((v) => !v)}
-            className="rounded-lg bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600"
+            className="rounded-xl bg-brand-500 px-4 py-2 text-sm font-medium text-white transition active:scale-95 hover:bg-brand-600"
           >
             + Neue Liste
           </button>
@@ -66,26 +74,26 @@ export function Lists() {
       {showForm && (
         <form
           onSubmit={handleSubmit}
-          className="mb-6 flex flex-col gap-3 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-brand-100"
+          className="mb-6 flex flex-col gap-3 rounded-3xl bg-white p-5 shadow-sm ring-1 ring-brand-100"
         >
           <h2 className="font-semibold text-neutral-800">Neue Liste anlegen</h2>
           <input
             placeholder="Titel (z. B. Kuchenliste)"
             value={form.title}
             onChange={(e) => setForm({ ...form, title: e.target.value })}
-            className="rounded-lg border border-neutral-300 px-3 py-2 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
+            className="rounded-xl border border-neutral-300 px-3 py-2 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
           />
           <textarea
             placeholder="Beschreibung"
             value={form.description}
             onChange={(e) => setForm({ ...form, description: e.target.value })}
-            className="rounded-lg border border-neutral-300 px-3 py-2 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
+            className="rounded-xl border border-neutral-300 px-3 py-2 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
             rows={2}
           />
           <select
             value={form.eventId}
             onChange={(e) => setForm({ ...form, eventId: e.target.value })}
-            className="rounded-lg border border-neutral-300 px-3 py-2 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
+            className="rounded-xl border border-neutral-300 px-3 py-2 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
           >
             <option value="">Keinem Termin zugeordnet</option>
             {events.map((ev) => (
@@ -94,30 +102,53 @@ export function Lists() {
               </option>
             ))}
           </select>
-          <label className="flex items-center gap-2 text-sm text-neutral-600">
-            <input
-              type="checkbox"
-              checked={form.allowMemberAddItems}
-              onChange={(e) =>
-                setForm({ ...form, allowMemberAddItems: e.target.checked })
-              }
-              className="h-4 w-4 rounded border-neutral-300 text-brand-500 focus:ring-brand-300"
-            />
-            Mitglieder dürfen eigene Einträge hinzufügen (z. B. "Ich bringe Muffins")
-          </label>
+          <div className="flex flex-col gap-2 rounded-xl bg-neutral-50 p-3">
+            <p className="text-xs font-medium text-neutral-500">
+              Welche Art von Einträgen soll diese Liste haben?
+            </p>
+            <label className="flex items-center gap-2 text-sm text-neutral-600">
+              <input
+                type="checkbox"
+                checked={form.allowAdminSlots}
+                onChange={(e) => setForm({ ...form, allowAdminSlots: e.target.checked })}
+                className="h-4 w-4 rounded border-neutral-300 text-brand-500 focus:ring-brand-300"
+              />
+              Vordefinierte Plätze/Slots durch Admins (z. B. "Kasse 10–12 Uhr")
+            </label>
+            <label className="flex items-center gap-2 text-sm text-neutral-600">
+              <input
+                type="checkbox"
+                checked={form.allowMemberAddItems}
+                onChange={(e) =>
+                  setForm({ ...form, allowMemberAddItems: e.target.checked })
+                }
+                className="h-4 w-4 rounded border-neutral-300 text-brand-500 focus:ring-brand-300"
+              />
+              Mitglieder dürfen eigene Einträge hinzufügen (z. B. "Ich bringe Muffins")
+            </label>
+            <label className="flex items-center gap-2 text-sm text-neutral-600">
+              <input
+                type="checkbox"
+                checked={form.enableWaitlist}
+                onChange={(e) => setForm({ ...form, enableWaitlist: e.target.checked })}
+                className="h-4 w-4 rounded border-neutral-300 text-brand-500 focus:ring-brand-300"
+              />
+              Warteliste anbieten, wenn ein Platz voll ist
+            </label>
+          </div>
           {error && <p className="text-sm text-red-600">{error}</p>}
           <div className="flex gap-2">
             <button
               type="submit"
               disabled={saving}
-              className="rounded-lg bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600 disabled:opacity-60"
+              className="rounded-xl bg-brand-500 px-4 py-2 text-sm font-medium text-white transition active:scale-95 hover:bg-brand-600 disabled:opacity-60"
             >
               {saving ? "Speichert…" : "Speichern"}
             </button>
             <button
               type="button"
               onClick={() => setShowForm(false)}
-              className="rounded-lg px-4 py-2 text-sm font-medium text-neutral-500 hover:bg-neutral-100"
+              className="rounded-xl px-4 py-2 text-sm font-medium text-neutral-500 hover:bg-neutral-100"
             >
               Abbrechen
             </button>
@@ -138,7 +169,7 @@ export function Lists() {
               <li key={list.id}>
                 <Link
                   to={`/lists/${list.id}`}
-                  className="block h-full rounded-2xl bg-white p-5 shadow-sm ring-1 ring-brand-100 transition hover:ring-brand-300"
+                  className="block h-full rounded-3xl bg-white p-5 shadow-sm ring-1 ring-brand-100 transition hover:ring-brand-300"
                 >
                   <h3 className="font-semibold text-neutral-800">{list.title}</h3>
                   {list.eventId && eventTitleById[list.eventId] && (

@@ -1,41 +1,72 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
+import { LoginModalProvider } from "./contexts/LoginModalContext";
 import { AdminRoute, ProtectedRoute } from "./components/ProtectedRoute";
 import { Layout } from "./components/Layout";
-import { Login } from "./pages/Login";
 import { Dashboard } from "./pages/Dashboard";
 import { Events } from "./pages/Events";
+import { EventDetail } from "./pages/EventDetail";
 import { Lists } from "./pages/Lists";
 import { ListDetail } from "./pages/ListDetail";
+import { Basare } from "./pages/Basare";
+import { BasarDetail } from "./pages/BasarDetail";
 import { AdminUsers } from "./pages/AdminUsers";
 
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route
-            element={
-              <ProtectedRoute>
-                <Layout />
-              </ProtectedRoute>
-            }
-          >
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/events" element={<Events />} />
-            <Route path="/lists" element={<Lists />} />
-            <Route path="/lists/:id" element={<ListDetail />} />
-            <Route
-              path="/admin/users"
-              element={
-                <AdminRoute>
-                  <AdminUsers />
-                </AdminRoute>
-              }
-            />
-          </Route>
-        </Routes>
+        <LoginModalProvider>
+          <Routes>
+            {/* Old bookmarks to the login page just land on the (now public) home page. */}
+            <Route path="/login" element={<Navigate to="/" replace />} />
+            <Route element={<Layout />}>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/events" element={<Events />} />
+              <Route path="/events/:id" element={<EventDetail />} />
+              <Route
+                path="/lists"
+                element={
+                  <ProtectedRoute>
+                    <Lists />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/lists/:id"
+                element={
+                  <ProtectedRoute>
+                    <ListDetail />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/basare"
+                element={
+                  <ProtectedRoute>
+                    <Basare />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/basare/:id"
+                element={
+                  <ProtectedRoute>
+                    <BasarDetail />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/users"
+                element={
+                  <AdminRoute>
+                    <AdminUsers />
+                  </AdminRoute>
+                }
+              />
+            </Route>
+          </Routes>
+        </LoginModalProvider>
       </AuthProvider>
     </BrowserRouter>
   );
