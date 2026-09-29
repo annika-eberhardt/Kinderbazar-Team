@@ -21,15 +21,15 @@ export function Layout() {
     : navItems;
 
   const desktopLinkClass = ({ isActive }: { isActive: boolean }) =>
-    `rounded-xl px-3 py-2 text-sm font-medium transition ${
+    `rounded-full px-3.5 py-2 text-sm font-medium transition ${
       isActive
-        ? "bg-white text-brand-700"
+        ? "bg-white text-brand-700 shadow-sm"
         : "text-white/90 hover:bg-white/15 hover:text-white"
     }`;
 
   return (
-    <div className="min-h-screen bg-white">
-      <header className="sticky top-0 z-20 bg-brand-600 pt-[env(safe-area-inset-top)] shadow-sm print:hidden">
+    <div className="min-h-screen">
+      <header className="sticky top-0 z-20 bg-gradient-to-r from-brand-600 via-brand-600 to-brand-500 pt-[env(safe-area-inset-top)] shadow-[0_4px_24px_-6px_rgba(204,0,104,0.45)] print:hidden">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-2.5">
           <div className="flex items-center gap-2">
             <img
@@ -92,7 +92,7 @@ export function Layout() {
 
       <LoginModal />
 
-      <nav className="fixed inset-x-0 bottom-0 z-20 border-t border-neutral-100 bg-white/95 pb-[env(safe-area-inset-bottom)] shadow-[0_-4px_16px_rgba(0,0,0,0.06)] backdrop-blur sm:hidden print:hidden">
+      <nav className="fixed inset-x-0 bottom-0 z-20 border-t border-neutral-100 bg-white/90 pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_24px_-8px_rgba(204,0,104,0.18)] backdrop-blur-lg sm:hidden print:hidden">
         <div className="mx-auto flex max-w-5xl items-stretch justify-around">
           {items.map(({ to, label, end, Icon }) => (
             <NavLink
@@ -100,14 +100,20 @@ export function Layout() {
               to={to}
               end={end}
               className={({ isActive }) =>
-                `flex flex-1 flex-col items-center gap-0.5 py-2.5 text-xs font-medium transition ${
+                `flex flex-1 flex-col items-center gap-0.5 py-2 text-xs font-medium transition ${
                   isActive ? "text-brand-600" : "text-neutral-400"
                 }`
               }
             >
               {({ isActive }) => (
                 <>
-                  <Icon className={`h-6 w-6 ${isActive ? "stroke-[2.2]" : ""}`} />
+                  <span
+                    className={`flex h-7 w-12 items-center justify-center rounded-full transition ${
+                      isActive ? "bg-brand-50" : ""
+                    }`}
+                  >
+                    <Icon className={`h-5 w-5 ${isActive ? "stroke-[2.2]" : ""}`} />
+                  </span>
                   {label}
                 </>
               )}
