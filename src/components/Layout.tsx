@@ -22,7 +22,7 @@ const navItems = [
 ];
 
 export function Layout() {
-  const { firebaseUser, profile, isAdmin, logout } = useAuth();
+  const { firebaseUser, isAdmin, logout } = useAuth();
   const { open: openLogin } = useLoginModal();
 
   const items = isAdmin
@@ -66,7 +66,7 @@ export function Layout() {
                   className="flex items-center gap-1.5 rounded-full p-2.5 text-white/90 transition hover:bg-white/15 hover:text-white sm:rounded-xl sm:px-3 sm:py-2"
                 >
                   <UserIcon className="h-5 w-5 sm:hidden" />
-                  <span className="hidden text-sm font-medium sm:inline">{profile?.name}</span>
+                  <span className="hidden text-sm font-medium sm:inline">Mein Konto</span>
                 </Link>
                 <button
                   onClick={logout}
