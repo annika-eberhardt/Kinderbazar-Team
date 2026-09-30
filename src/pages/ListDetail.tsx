@@ -142,6 +142,11 @@ export function ListDetail() {
   }
 
   const eventTitleById = Object.fromEntries(events.map((e) => [e.id, e.title]));
+  // Only future events are offered for linking — except the one already
+  // linked, so editing doesn't silently hide the current assignment.
+  const selectableEvents = events.filter(
+    (ev) => new Date(ev.date).getTime() >= Date.now() || ev.id === metaForm.eventId,
+  );
 
   return (
     <div>
@@ -186,7 +191,7 @@ export function ListDetail() {
             className="rounded-xl border border-neutral-300 px-3 py-2 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
           >
             <option value="">Keinem Termin zugeordnet</option>
-            {events.map((ev) => (
+            {selectableEvents.map((ev) => (
               <option key={ev.id} value={ev.id}>
                 {ev.title}
               </option>

@@ -56,6 +56,7 @@ export function Lists() {
   }
 
   const eventTitleById = Object.fromEntries(events.map((e) => [e.id, e.title]));
+  const futureEvents = events.filter((ev) => new Date(ev.date).getTime() >= Date.now());
 
   return (
     <div>
@@ -96,7 +97,7 @@ export function Lists() {
             className="rounded-xl border border-neutral-300 px-3 py-2 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
           >
             <option value="">Keinem Termin zugeordnet</option>
-            {events.map((ev) => (
+            {futureEvents.map((ev) => (
               <option key={ev.id} value={ev.id}>
                 {ev.title}
               </option>
