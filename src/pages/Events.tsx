@@ -12,9 +12,10 @@ import { useAuth } from "../contexts/AuthContext";
 import { useCollection } from "../hooks/useCollection";
 import { CalendarIcon } from "../components/icons";
 import { downloadEventIcs } from "../lib/ics";
+import { formatTimeOnly, isSameDay } from "../lib/eventTime";
 import type { EventItem } from "../types";
 
-const emptyForm = { title: "", description: "", date: "", location: "" };
+const emptyForm = { title: "", description: "", date: "", endDate: "", location: "" };
 const PAST_GRACE_MS = 1000 * 60 * 60 * 6;
 
 export function Events() {
@@ -39,6 +40,7 @@ export function Events() {
       title: ev.title,
       description: ev.description,
       date: ev.date,
+      endDate: ev.endDate ?? "",
       location: ev.location,
     });
     setShowForm(true);
@@ -52,6 +54,10 @@ export function Events() {
       setError("Titel und Datum sind erforderlich.");
       return;
     }
+    if (form.endDate && form.endDate <= form.date) {
+      setError("Die Endzeit muss nach der Startzeit liegen.");
+      return;
+    }
     setSaving(true);
     try {
       if (editingId) {
@@ -59,6 +65,7 @@ export function Events() {
           title: form.title.trim(),
           description: form.description.trim(),
           date: form.date,
+          endDate: form.endDate,
           location: form.location.trim(),
         });
       } else {
@@ -66,6 +73,7 @@ export function Events() {
           title: form.title.trim(),
           description: form.description.trim(),
           date: form.date,
+          endDate: form.endDate,
           location: form.location.trim(),
           createdBy: profile.uid,
           createdAt: serverTimestamp(),
@@ -103,6 +111,11 @@ export function Events() {
             <h3 className="font-semibold text-neutral-800">{ev.title}</h3>
             <p className="mt-1 text-sm text-brand-600">
               {formatDate(ev.date)}
+              {ev.endDate
+                ? isSameDay(ev.date, ev.endDate)
+                  ? `–${formatTimeOnly(ev.endDate)}`
+                  : ` – ${formatDate(ev.endDate)}`
+                : ""}
               {ev.location ? ` · ${ev.location}` : ""}
             </p>
             {ev.description && (
@@ -177,19 +190,35 @@ export function Events() {
             rows={2}
           />
           <div className="flex flex-col gap-3 sm:flex-row">
-            <input
-              type="datetime-local"
-              value={form.date}
-              onChange={(e) => setForm({ ...form, date: e.target.value })}
-              className="flex-1 rounded-xl border border-neutral-300 px-3 py-2 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
-            />
-            <input
-              placeholder="Ort"
-              value={form.location}
-              onChange={(e) => setForm({ ...form, location: e.target.value })}
-              className="flex-1 rounded-xl border border-neutral-300 px-3 py-2 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
-            />
+            <div className="flex-1">
+              <label className="mb-1 block text-xs font-medium text-neutral-500">
+                Beginn
+              </label>
+              <input
+                type="datetime-local"
+                value={form.date}
+                onChange={(e) => setForm({ ...form, date: e.target.value })}
+                className="w-full rounded-xl border border-neutral-300 px-3 py-2 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
+              />
+            </div>
+            <div className="flex-1">
+              <label className="mb-1 block text-xs font-medium text-neutral-500">
+                Ende (optional)
+              </label>
+              <input
+                type="datetime-local"
+                value={form.endDate}
+                onChange={(e) => setForm({ ...form, endDate: e.target.value })}
+                className="w-full rounded-xl border border-neutral-300 px-3 py-2 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
+              />
+            </div>
           </div>
+          <input
+            placeholder="Ort"
+            value={form.location}
+            onChange={(e) => setForm({ ...form, location: e.target.value })}
+            className="rounded-xl border border-neutral-300 px-3 py-2 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
+          />
           {error && <p className="text-sm text-red-600">{error}</p>}
           <div className="flex gap-2">
             <button

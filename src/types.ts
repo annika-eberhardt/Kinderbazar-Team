@@ -14,6 +14,7 @@ export interface EventItem {
   title: string;
   description: string;
   date: string; // ISO datetime-local string
+  endDate: string; // ISO datetime-local string; empty if no end time was set
   location: string;
   createdBy: string;
   createdAt: number;

@@ -7,6 +7,7 @@ import { useCollection } from "../hooks/useCollection";
 import { useDocument } from "../hooks/useDocument";
 import { CalendarIcon } from "../components/icons";
 import { downloadEventIcs } from "../lib/ics";
+import { formatTimeOnly, isSameDay } from "../lib/eventTime";
 import { BASAR_STATUS_LABELS } from "../lib/basars";
 import type { Basar, EventItem, SignupList } from "../types";
 
@@ -34,7 +35,13 @@ export function EventDetail() {
   );
 
   const [editing, setEditing] = useState(false);
-  const [form, setForm] = useState({ title: "", description: "", date: "", location: "" });
+  const [form, setForm] = useState({
+    title: "",
+    description: "",
+    date: "",
+    endDate: "",
+    location: "",
+  });
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
@@ -47,6 +54,7 @@ export function EventDetail() {
       title: event.title,
       description: event.description,
       date: event.date,
+      endDate: event.endDate ?? "",
       location: event.location,
     });
     setEditing(true);
@@ -60,12 +68,17 @@ export function EventDetail() {
       setError("Titel und Datum sind erforderlich.");
       return;
     }
+    if (form.endDate && form.endDate <= form.date) {
+      setError("Die Endzeit muss nach der Startzeit liegen.");
+      return;
+    }
     setSaving(true);
     try {
       await updateDoc(doc(db, "events", event.id), {
         title: form.title.trim(),
         description: form.description.trim(),
         date: form.date,
+        endDate: form.endDate,
         location: form.location.trim(),
       });
       setEditing(false);
@@ -112,19 +125,35 @@ export function EventDetail() {
             rows={2}
           />
           <div className="flex flex-col gap-3 sm:flex-row">
-            <input
-              type="datetime-local"
-              value={form.date}
-              onChange={(e) => setForm({ ...form, date: e.target.value })}
-              className="flex-1 rounded-xl border border-neutral-300 px-3 py-2 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
-            />
-            <input
-              placeholder="Ort"
-              value={form.location}
-              onChange={(e) => setForm({ ...form, location: e.target.value })}
-              className="flex-1 rounded-xl border border-neutral-300 px-3 py-2 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
-            />
+            <div className="flex-1">
+              <label className="mb-1 block text-xs font-medium text-neutral-500">
+                Beginn
+              </label>
+              <input
+                type="datetime-local"
+                value={form.date}
+                onChange={(e) => setForm({ ...form, date: e.target.value })}
+                className="w-full rounded-xl border border-neutral-300 px-3 py-2 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
+              />
+            </div>
+            <div className="flex-1">
+              <label className="mb-1 block text-xs font-medium text-neutral-500">
+                Ende (optional)
+              </label>
+              <input
+                type="datetime-local"
+                value={form.endDate}
+                onChange={(e) => setForm({ ...form, endDate: e.target.value })}
+                className="w-full rounded-xl border border-neutral-300 px-3 py-2 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
+              />
+            </div>
           </div>
+          <input
+            placeholder="Ort"
+            value={form.location}
+            onChange={(e) => setForm({ ...form, location: e.target.value })}
+            className="rounded-xl border border-neutral-300 px-3 py-2 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
+          />
           {error && <p className="text-sm text-red-600">{error}</p>}
           <div className="flex gap-2">
             <button
@@ -150,6 +179,11 @@ export function EventDetail() {
               <h1 className="text-2xl font-bold text-neutral-800">{event.title}</h1>
               <p className="mt-1 text-sm text-brand-600">
                 {formatDate(event.date)}
+                {event.endDate
+                  ? isSameDay(event.date, event.endDate)
+                    ? `–${formatTimeOnly(event.endDate)}`
+                    : ` – ${formatDate(event.endDate)}`
+                  : ""}
                 {event.location ? ` · ${event.location}` : ""}
               </p>
             </div>

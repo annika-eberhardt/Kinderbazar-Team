@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useCollection } from "../hooks/useCollection";
 import { ListIcon, TagIcon } from "../components/icons";
+import { formatTimeOnly, isSameDay } from "../lib/eventTime";
 import type { Basar, BasarTeilnahme, EventItem, SignupList } from "../types";
 
 export function Dashboard() {
@@ -109,6 +110,11 @@ export function Dashboard() {
                 <p className="font-semibold text-neutral-800">{event.title}</p>
                 <p className="text-sm text-brand-600">
                   {formatDate(event.date)}
+                  {event.endDate
+                    ? isSameDay(event.date, event.endDate)
+                      ? `–${formatTimeOnly(event.endDate)}`
+                      : ` – ${formatDate(event.endDate)}`
+                    : ""}
                   {event.location ? ` · ${event.location}` : ""}
                 </p>
                 {event.description && (

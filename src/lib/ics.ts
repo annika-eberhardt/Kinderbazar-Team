@@ -16,7 +16,9 @@ function toIcsUtc(date: Date) {
 
 export function buildEventIcs(event: EventItem) {
   const start = new Date(event.date);
-  const end = new Date(start.getTime() + DEFAULT_DURATION_HOURS * 60 * 60 * 1000);
+  const end = event.endDate
+    ? new Date(event.endDate)
+    : new Date(start.getTime() + DEFAULT_DURATION_HOURS * 60 * 60 * 1000);
   const now = new Date();
 
   const lines = [
