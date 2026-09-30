@@ -36,7 +36,7 @@ export function Layout() {
 
   return (
     <div className="min-h-screen">
-      <header className="sticky top-0 z-20 bg-gradient-to-r from-brand-600 via-brand-600 to-brand-500 pt-[env(safe-area-inset-top)] shadow-[0_4px_24px_-6px_rgba(204,0,104,0.45)] print:hidden">
+      <header className="sticky top-0 z-20 bg-gradient-to-r from-brand-600 via-brand-600 to-brand-500 pt-[env(safe-area-inset-top)] shadow-[0_4px_24px_-6px_rgba(202,22,85,0.45)] print:hidden">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-2.5">
           <div className="flex items-center gap-2">
             <img
@@ -104,7 +104,7 @@ export function Layout() {
 
       <LoginModal />
 
-      <nav className="fixed inset-x-0 bottom-0 z-20 border-t border-neutral-100 bg-white/90 pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_24px_-8px_rgba(204,0,104,0.18)] backdrop-blur-lg sm:hidden print:hidden">
+      <nav className="fixed inset-x-0 bottom-0 z-20 border-t border-neutral-100 bg-white/90 pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_24px_-8px_rgba(202,22,85,0.18)] backdrop-blur-lg sm:hidden print:hidden">
         <div className="mx-auto flex max-w-5xl items-stretch justify-around">
           {items.map(({ to, label, end, Icon }) => (
             <NavLink

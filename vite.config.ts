@@ -15,7 +15,7 @@ export default defineConfig({
         name: 'Kinderbasar Team',
         short_name: 'Kinderbasar',
         description: 'Termine und Listen für das Kinderbasar-Team',
-        theme_color: '#cc0068',
+        theme_color: '#e83d78',
         background_color: '#ffffff',
         display: 'standalone',
         start_url: '/',

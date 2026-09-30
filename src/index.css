@@ -2,16 +2,16 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand-50: #fff0f6;
-  --color-brand-100: #ffe0ee;
-  --color-brand-200: #ffbedd;
-  --color-brand-300: #ff8fc4;
-  --color-brand-400: #fa5aa5;
-  --color-brand-500: #f0127e;
-  --color-brand-600: #cc0068;
-  --color-brand-700: #ac0e54;
-  --color-brand-800: #8c1049;
-  --color-brand-900: #751142;
+  --color-brand-50: #ffebf2;
+  --color-brand-100: #ffd1e1;
+  --color-brand-200: #fcacc8;
+  --color-brand-300: #f575a2;
+  --color-brand-400: #ee4480;
+  --color-brand-500: #e83d78;
+  --color-brand-600: #ca1655;
+  --color-brand-700: #a31446;
+  --color-brand-800: #81133a;
+  --color-brand-900: #63132f;
 
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
 
@@ -21,8 +21,8 @@
   --radius-3xl: 1.75rem;
 
   /* Richer, brand-tinted depth instead of the flat default shadow. */
-  --shadow-sm: 0 1px 2px rgba(17, 17, 17, 0.04), 0 14px 28px -16px rgba(204, 0, 104, 0.28);
-  --shadow-md: 0 2px 6px rgba(17, 17, 17, 0.05), 0 20px 36px -14px rgba(204, 0, 104, 0.32);
+  --shadow-sm: 0 1px 2px rgba(17, 17, 17, 0.04), 0 14px 28px -16px rgba(202, 22, 85, 0.28);
+  --shadow-md: 0 2px 6px rgba(17, 17, 17, 0.05), 0 20px 36px -14px rgba(202, 22, 85, 0.32);
 }
 
 html,
@@ -36,8 +36,8 @@ body {
   @apply text-neutral-800 antialiased font-sans;
   background-color: #fafafa;
   background-image:
-    radial-gradient(900px 420px at 10% -10%, rgba(240, 18, 126, 0.08), transparent 60%),
-    radial-gradient(760px 420px at 100% 0%, rgba(240, 18, 126, 0.06), transparent 60%);
+    radial-gradient(900px 420px at 10% -10%, rgba(232, 61, 120, 0.08), transparent 60%),
+    radial-gradient(760px 420px at 100% 0%, rgba(232, 61, 120, 0.06), transparent 60%);
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
