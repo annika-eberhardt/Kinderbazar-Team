@@ -49,28 +49,9 @@ export interface SignupList {
   createdAt: number;
 }
 
-export type BasarStatus =
-  | "anmeldung_offen"
-  | "anmeldung_geschlossen"
-  | "laufend"
-  | "abgeschlossen";
-
-export interface Basar {
-  id: string;
-  name: string;
-  datum: string; // ISO date (yyyy-mm-dd)
-  status: BasarStatus;
-  createdBy: string;
-  createdAt: number;
-}
-
 export type VerkaeufernummerStatus = "aktiv" | "storniert";
 
-/**
- * A person's permanent registration for a Verkäufernummer. Independent of
- * any single Basar — the number stays theirs across events. Whether it's
- * actually in use at a given Basar is tracked separately via BasarTeilnahme.
- */
+/** A person's registration for a Verkäufernummer — permanent until storniert. */
 export interface Verkaeufernummer {
   id: string;
   nummer: number;
@@ -81,14 +62,4 @@ export interface Verkaeufernummer {
   vergebenVon: string;
   vergebenVonName: string;
   vergebenAm: number;
-}
-
-/** Confirms that a registered Verkäufernummer is participating in a specific Basar. */
-export interface BasarTeilnahme {
-  id: string;
-  basarId: string;
-  verkaeufernummerId: string;
-  bestaetigtVon: string;
-  bestaetigtVonName: string;
-  bestaetigtAm: number;
 }

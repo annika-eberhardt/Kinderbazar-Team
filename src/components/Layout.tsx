@@ -16,7 +16,7 @@ import {
 const navItems = [
   { to: "/events", label: "Termine", end: false, Icon: CalendarIcon },
   { to: "/lists", label: "Listen", end: false, Icon: ListIcon },
-  { to: "/basare", label: "Nummernvergabe", end: false, Icon: TagIcon },
+  { to: "/nummernvergabe", label: "Nummernvergabe", end: false, Icon: TagIcon },
 ];
 
 export function Layout() {

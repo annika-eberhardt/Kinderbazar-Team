@@ -14,8 +14,8 @@ export function EventDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { firebaseUser, isAdmin } = useAuth();
-  // Lists and Basare are member-only data, so only fetch them once someone
-  // is signed in — a guest just sees the public event details.
+  // Lists are member-only data, so only fetch them once someone is
+  // signed in — a guest just sees the public event details.
   const signedIn = !!firebaseUser;
   const { data: event, loading } = useDocument<EventItem>("events", id);
   const { data: linkedLists } = useCollection<SignupList>(

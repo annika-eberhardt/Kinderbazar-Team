@@ -7,8 +7,7 @@ import { Events } from "./pages/Events";
 import { EventDetail } from "./pages/EventDetail";
 import { Lists } from "./pages/Lists";
 import { ListDetail } from "./pages/ListDetail";
-import { Basare } from "./pages/Basare";
-import { BasarDetail } from "./pages/BasarDetail";
+import { Nummernvergabe } from "./pages/Nummernvergabe";
 import { AdminUsers } from "./pages/AdminUsers";
 import { Account } from "./pages/Account";
 import { Impressum } from "./pages/Impressum";
@@ -45,21 +44,16 @@ function App() {
                 }
               />
               <Route
-                path="/basare"
+                path="/nummernvergabe"
                 element={
                   <ProtectedRoute>
-                    <Basare />
+                    <Nummernvergabe />
                   </ProtectedRoute>
                 }
               />
-              <Route
-                path="/basare/:id"
-                element={
-                  <ProtectedRoute>
-                    <BasarDetail />
-                  </ProtectedRoute>
-                }
-              />
+              {/* Old Basar list/detail bookmarks land on the new, Termin-independent page. */}
+              <Route path="/basare" element={<Navigate to="/nummernvergabe" replace />} />
+              <Route path="/basare/:id" element={<Navigate to="/nummernvergabe" replace />} />
               <Route
                 path="/konto"
                 element={

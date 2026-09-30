@@ -62,25 +62,10 @@ service cloud.firestore {
           request.resource.data.createdBy == resource.data.createdBy);
     }
 
-    // Basare: any active member can read. Only admins manage name/datum/
-    // status — active members no longer write to the Basar doc itself,
-    // since Verkäufernummer state lives in separate collections. Basare
-    // are standalone and are not linked to events.
-    match /basars/{basarId} {
-      allow read: if isSignedIn();
-      allow create, update, delete: if isAdmin();
-    }
-
-    // Verkäufernummern: a permanent, Basar-independent registration per
-    // person. Any active member can register/edit/cancel/release one.
+    // Verkäufernummern: the whole Nummernvergabe feature — a standalone,
+    // permanent registration per person, with no Basar/Termin of its own.
+    // Any active member can register/edit/cancel/release one.
     match /verkaeufernummern/{numberId} {
-      allow read: if isSignedIn();
-      allow create, update, delete: if isActiveMember();
-    }
-
-    // BasarTeilnahmen: confirms a Verkäufernummer's participation in one
-    // specific Basar. Any active member can confirm/un-confirm.
-    match /basarTeilnahmen/{teilnahmeId} {
       allow read: if isSignedIn();
       allow create, update, delete: if isActiveMember();
     }
