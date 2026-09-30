@@ -5,13 +5,7 @@ import { useCollection } from "../hooks/useCollection";
 import { useDocument } from "../hooks/useDocument";
 import { PrintIcon } from "../components/icons";
 import { printOrOpenPrintTab, useAutoPrint } from "../lib/print";
-import {
-  BASAR_STATUSES,
-  BASAR_STATUS_LABELS,
-  deleteBasar,
-  eventDateOnly,
-  updateBasarMeta,
-} from "../lib/basars";
+import { BASAR_STATUSES, BASAR_STATUS_LABELS, deleteBasar, updateBasarMeta } from "../lib/basars";
 import {
   bestaetigeFuerBasar,
   entferneBestaetigung,
@@ -20,7 +14,7 @@ import {
   storniereNummer,
   updateVerkaeufernummer,
 } from "../lib/verkaeufernummern";
-import type { Basar, BasarStatus, BasarTeilnahme, EventItem, Verkaeufernummer } from "../types";
+import type { Basar, BasarStatus, BasarTeilnahme, Verkaeufernummer } from "../types";
 
 const emptySellerForm = { vorname: "", nachname: "", kontakt: "" };
 
@@ -29,7 +23,6 @@ export function BasarDetail() {
   const navigate = useNavigate();
   const { profile, isAdmin } = useAuth();
   const { data: basar, loading } = useDocument<Basar>("basars", id);
-  const { data: events } = useCollection<EventItem>("events", "date", "asc");
   const { data: nummern, loading: nummernLoading } = useCollection<Verkaeufernummer>(
     "verkaeufernummern",
     "nummer",
@@ -47,12 +40,10 @@ export function BasarDetail() {
   const [metaForm, setMetaForm] = useState<{
     name: string;
     datum: string;
-    eventId: string;
     status: BasarStatus;
   }>({
     name: "",
     datum: "",
-    eventId: "",
     status: "anmeldung_offen",
   });
 
@@ -70,16 +61,6 @@ export function BasarDetail() {
   if (loading) return <p className="text-neutral-500">Lädt…</p>;
   if (!basar) return <p className="text-neutral-500">Basar nicht gefunden.</p>;
   if (!profile) return null;
-
-  const eventById = Object.fromEntries(events.map((e) => [e.id, e]));
-
-  const selectedEvent = events.find((ev) => ev.id === metaForm.eventId);
-  const effectiveName = selectedEvent ? selectedEvent.title : metaForm.name;
-  const effectiveDatum = selectedEvent ? eventDateOnly(selectedEvent.date) : metaForm.datum;
-
-  const linkedEvent = basar.eventId ? eventById[basar.eventId] : undefined;
-  const displayName = linkedEvent ? linkedEvent.title : basar.name;
-  const displayDatum = linkedEvent ? eventDateOnly(linkedEvent.date) : basar.datum;
 
   const aktiveNummern = nummern.filter((n) => n.status === "aktiv");
   const stornierteNummern = nummern.filter((n) => n.status === "storniert");
@@ -105,7 +86,6 @@ export function BasarDetail() {
     setMetaForm({
       name: basar.name,
       datum: basar.datum,
-      eventId: basar.eventId ?? "",
       status: basar.status,
     });
     setEditingMeta(true);
@@ -113,14 +93,13 @@ export function BasarDetail() {
 
   async function handleSaveMeta(e: FormEvent) {
     e.preventDefault();
-    if (!basar || !effectiveName.trim() || !effectiveDatum) return;
+    if (!basar || !metaForm.name.trim() || !metaForm.datum) return;
     setError(null);
     setBusy(true);
     try {
       await updateBasarMeta(basar.id, {
-        name: effectiveName.trim(),
-        datum: effectiveDatum,
-        eventId: metaForm.eventId || null,
+        name: metaForm.name.trim(),
+        datum: metaForm.datum,
         status: metaForm.status,
       });
       setEditingMeta(false);
@@ -135,7 +114,7 @@ export function BasarDetail() {
     if (!basar) return;
     if (
       !confirm(
-        `Basar "${displayName}" wirklich löschen? Die Verkäufernummern selbst bleiben erhalten, nur die Bestätigungen für diesen Basar gehen verloren.`,
+        `Basar "${basar.name}" wirklich löschen? Die Verkäufernummern selbst bleiben erhalten, nur die Bestätigungen für diesen Basar gehen verloren.`,
       )
     ) {
       return;
@@ -284,37 +263,18 @@ export function BasarDetail() {
           className="mb-6 flex flex-col gap-3 rounded-3xl bg-white p-5 shadow-sm ring-1 ring-brand-100"
         >
           <h2 className="font-semibold text-neutral-800">Basar bearbeiten</h2>
-          <select
-            value={metaForm.eventId}
-            onChange={(e) => setMetaForm({ ...metaForm, eventId: e.target.value })}
-            className="rounded-xl border border-neutral-300 px-3 py-2 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
-          >
-            <option value="">Keinem Termin zugeordnet</option>
-            {events.map((ev) => (
-              <option key={ev.id} value={ev.id}>
-                {ev.title}
-              </option>
-            ))}
-          </select>
           <input
             placeholder="Name"
-            value={effectiveName}
-            disabled={!!selectedEvent}
+            value={metaForm.name}
             onChange={(e) => setMetaForm({ ...metaForm, name: e.target.value })}
-            className="rounded-xl border border-neutral-300 px-3 py-2 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-200 disabled:bg-neutral-50 disabled:text-neutral-500"
+            className="rounded-xl border border-neutral-300 px-3 py-2 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
           />
           <input
             type="date"
-            value={effectiveDatum}
-            disabled={!!selectedEvent}
+            value={metaForm.datum}
             onChange={(e) => setMetaForm({ ...metaForm, datum: e.target.value })}
-            className="rounded-xl border border-neutral-300 px-3 py-2 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-200 disabled:bg-neutral-50 disabled:text-neutral-500"
+            className="rounded-xl border border-neutral-300 px-3 py-2 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
           />
-          {selectedEvent && (
-            <p className="text-xs text-neutral-400">
-              Name und Datum werden automatisch aus dem Termin übernommen.
-            </p>
-          )}
           <select
             value={metaForm.status}
             onChange={(e) => setMetaForm({ ...metaForm, status: e.target.value as BasarStatus })}
@@ -347,11 +307,8 @@ export function BasarDetail() {
       ) : (
         <div className="mb-6 flex items-start justify-between gap-3">
           <div>
-            <h1 className="text-2xl font-bold text-neutral-800">{displayName}</h1>
-            <p className="mt-1 text-sm text-neutral-500">{formatDate(displayDatum)}</p>
-            {linkedEvent && (
-              <p className="mt-1 text-xs font-medium text-brand-600">Termin verknüpft</p>
-            )}
+            <h1 className="text-2xl font-bold text-neutral-800">{basar.name}</h1>
+            <p className="mt-1 text-sm text-neutral-500">{formatDate(basar.datum)}</p>
             <span className="mt-2 inline-block rounded-full bg-brand-50 px-2.5 py-1 text-xs font-medium text-brand-700">
               {BASAR_STATUS_LABELS[basar.status]}
             </span>

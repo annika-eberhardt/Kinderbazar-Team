@@ -59,7 +59,6 @@ export interface Basar {
   id: string;
   name: string;
   datum: string; // ISO date (yyyy-mm-dd)
-  eventId: string | null;
   status: BasarStatus;
   createdBy: string;
   createdAt: number;

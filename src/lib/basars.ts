@@ -26,21 +26,10 @@ export const BASAR_STATUS_LABELS: Record<BasarStatus, string> = {
   abgeschlossen: "Abgeschlossen",
 };
 
-/** Basar.datum is a plain yyyy-mm-dd date; EventItem.date is a full datetime-local string. */
-export function eventDateOnly(eventDate: string) {
-  return eventDate.slice(0, 10);
-}
-
-export function createBasar(input: {
-  name: string;
-  datum: string;
-  eventId: string | null;
-  createdBy: string;
-}) {
+export function createBasar(input: { name: string; datum: string; createdBy: string }) {
   return addDoc(collection(db, "basars"), {
     name: input.name,
     datum: input.datum,
-    eventId: input.eventId,
     status: "anmeldung_offen" satisfies BasarStatus,
     createdBy: input.createdBy,
     createdAt: serverTimestamp(),
@@ -49,7 +38,7 @@ export function createBasar(input: {
 
 export function updateBasarMeta(
   basarId: string,
-  input: { name: string; datum: string; eventId: string | null; status: BasarStatus },
+  input: { name: string; datum: string; status: BasarStatus },
 ) {
   return updateDoc(doc(db, "basars", basarId), input);
 }

@@ -63,8 +63,9 @@ service cloud.firestore {
     }
 
     // Basare: any active member can read. Only admins manage name/datum/
-    // eventId/status — active members no longer write to the Basar doc
-    // itself, since Verkäufernummer state lives in separate collections.
+    // status — active members no longer write to the Basar doc itself,
+    // since Verkäufernummer state lives in separate collections. Basare
+    // are standalone and are not linked to events.
     match /basars/{basarId} {
       allow read: if isSignedIn();
       allow create, update, delete: if isAdmin();

@@ -8,8 +8,7 @@ import { useDocument } from "../hooks/useDocument";
 import { CalendarIcon } from "../components/icons";
 import { downloadEventIcs } from "../lib/ics";
 import { formatTimeOnly, isSameDay } from "../lib/eventTime";
-import { BASAR_STATUS_LABELS } from "../lib/basars";
-import type { Basar, EventItem, SignupList } from "../types";
+import type { EventItem, SignupList } from "../types";
 
 export function EventDetail() {
   const { id } = useParams<{ id: string }>();
@@ -21,13 +20,6 @@ export function EventDetail() {
   const { data: event, loading } = useDocument<EventItem>("events", id);
   const { data: linkedLists } = useCollection<SignupList>(
     "lists",
-    undefined,
-    "asc",
-    ["eventId", "==", id],
-    signedIn,
-  );
-  const { data: linkedBasars } = useCollection<Basar>(
-    "basars",
     undefined,
     "asc",
     ["eventId", "==", id],
@@ -217,49 +209,23 @@ export function EventDetail() {
             Zum Kalender hinzufügen
           </button>
 
-          {(linkedLists.length > 0 || linkedBasars.length > 0) && (
-            <div className="mt-6 flex flex-col gap-4">
-              {linkedLists.length > 0 && (
-                <div>
-                  <p className="mb-1.5 text-xs font-semibold text-brand-500">
-                    Verknüpfte Listen
-                  </p>
-                  <ul className="flex flex-col gap-2">
-                    {linkedLists.map((list) => (
-                      <li key={list.id}>
-                        <Link
-                          to={`/lists/${list.id}`}
-                          className="block rounded-xl bg-neutral-50 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
-                        >
-                          {list.title}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-              {linkedBasars.length > 0 && (
-                <div>
-                  <p className="mb-1.5 text-xs font-semibold text-brand-500">
-                    Verknüpfte Basare
-                  </p>
-                  <ul className="flex flex-col gap-2">
-                    {linkedBasars.map((basar) => (
-                      <li key={basar.id}>
-                        <Link
-                          to={`/basare/${basar.id}`}
-                          className="block rounded-xl bg-neutral-50 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
-                        >
-                          {basar.name}{" "}
-                          <span className="text-neutral-400">
-                            · {BASAR_STATUS_LABELS[basar.status]}
-                          </span>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+          {linkedLists.length > 0 && (
+            <div className="mt-6">
+              <p className="mb-1.5 text-xs font-semibold text-brand-500">
+                Verknüpfte Listen
+              </p>
+              <ul className="flex flex-col gap-2">
+                {linkedLists.map((list) => (
+                  <li key={list.id}>
+                    <Link
+                      to={`/lists/${list.id}`}
+                      className="block rounded-xl bg-neutral-50 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
+                    >
+                      {list.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
           )}
         </div>

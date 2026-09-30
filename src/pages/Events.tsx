@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from "react";
+import { Link } from "react-router-dom";
 import {
   addDoc,
   collection,
@@ -108,8 +109,8 @@ export function Events() {
     return (
       <li key={ev.id} className="rounded-3xl bg-white p-5 shadow-sm ring-1 ring-brand-100">
         <div className="flex items-start justify-between gap-3">
-          <div>
-            <h3 className="font-semibold text-neutral-800">{ev.title}</h3>
+          <Link to={`/events/${ev.id}`} className="block">
+            <h3 className="font-semibold text-neutral-800 hover:underline">{ev.title}</h3>
             <p className="mt-1 text-sm text-brand-600">
               {formatDate(ev.date)}
               {ev.endDate
@@ -122,7 +123,7 @@ export function Events() {
             {ev.description && (
               <p className="mt-2 text-sm text-neutral-600">{ev.description}</p>
             )}
-          </div>
+          </Link>
           <div className="flex shrink-0 flex-col items-end gap-2">
             {!archived && (
               <button
