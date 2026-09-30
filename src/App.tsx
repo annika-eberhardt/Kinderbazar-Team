@@ -3,7 +3,6 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { LoginModalProvider } from "./contexts/LoginModalContext";
 import { AdminRoute, ProtectedRoute } from "./components/ProtectedRoute";
 import { Layout } from "./components/Layout";
-import { Dashboard } from "./pages/Dashboard";
 import { Events } from "./pages/Events";
 import { EventDetail } from "./pages/EventDetail";
 import { Lists } from "./pages/Lists";
@@ -22,9 +21,9 @@ function App() {
         <LoginModalProvider>
           <Routes>
             {/* Old bookmarks to the login page just land on the (now public) home page. */}
-            <Route path="/login" element={<Navigate to="/" replace />} />
+            <Route path="/login" element={<Navigate to="/events" replace />} />
             <Route element={<Layout />}>
-              <Route path="/" element={<Dashboard />} />
+              <Route path="/" element={<Navigate to="/events" replace />} />
               <Route path="/events" element={<Events />} />
               <Route path="/events/:id" element={<EventDetail />} />
               <Route path="/impressum" element={<Impressum />} />

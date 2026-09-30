@@ -62,7 +62,7 @@ export function AdminRoute({ children }: { children: ReactNode }) {
       {loading ? null : isAdmin ? (
         <>{children}</>
       ) : (
-        <Navigate to="/" replace />
+        <Navigate to="/events" replace />
       )}
     </ProtectedRoute>
   );

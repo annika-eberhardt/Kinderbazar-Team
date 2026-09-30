@@ -6,7 +6,6 @@ import logo from "../assets/logo.png";
 import {
   AdminIcon,
   CalendarIcon,
-  HomeIcon,
   ListIcon,
   LoginIcon,
   LogoutIcon,
@@ -15,7 +14,6 @@ import {
 } from "./icons";
 
 const navItems = [
-  { to: "/", label: "Übersicht", end: true, Icon: HomeIcon },
   { to: "/events", label: "Termine", end: false, Icon: CalendarIcon },
   { to: "/lists", label: "Listen", end: false, Icon: ListIcon },
   { to: "/basare", label: "Nummernvergabe", end: false, Icon: TagIcon },
