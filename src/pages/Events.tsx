@@ -19,7 +19,8 @@ const emptyForm = { title: "", description: "", date: "", endDate: "", location:
 const PAST_GRACE_MS = 1000 * 60 * 60 * 6;
 
 export function Events() {
-  const { profile, isAdmin } = useAuth();
+  const { firebaseUser, profile, isAdmin } = useAuth();
+  const signedIn = !!firebaseUser;
   const { data: events, loading } = useCollection<EventItem>("events", "date", "asc");
   const [showForm, setShowForm] = useState(false);
   const [showArchive, setShowArchive] = useState(false);
@@ -249,7 +250,7 @@ export function Events() {
         </ul>
       )}
 
-      {!loading && past.length > 0 && (
+      {signedIn && !loading && past.length > 0 && (
         <div className="mt-8">
           <button
             onClick={() => setShowArchive((v) => !v)}
